@@ -1,14 +1,15 @@
-const { send } = require('micro')
-const { router, get } = require('microrouter')
-const compress = require('micro-compress')
-const debug = require('debug')('wad')
-const prettyBytes = require('pretty-bytes')
-
-const UrlPattern = require('url-pattern')
 const path = require('path')
+
 const _ = require('lodash')
 
-const removeEndSlash = require('./lib/removeEndSlash')
+const { send } = require('micro')
+const compress = require('micro-compress')
+
+const UrlPattern = require('url-pattern')
+const prettyBytes = require('pretty-bytes')
+const debug = require('debug')('wad')
+
+const removeEndSlash = require('./lib/remove-end-slash')
 const load = require('./load')
 
 const wadPattern = new UrlPattern('/api/:strategy(/*)')
@@ -19,8 +20,8 @@ function getFile(wadId, fileId) {
   const wad = wads[wadId]
   let slice = null
   if (wad) {
-    const fd = wad.files[fileId]
-    if (fd) {
+    const fileDescriptor = wad.files[fileId]
+    if (fileDescriptor) {
       const { offset, size } = fileDescriptor
 
       // This is our actual target file
@@ -31,7 +32,7 @@ function getFile(wadId, fileId) {
   return slice
 }
 
-async function main(req, res, parsedUrl) {
+function main(req, res, parsedUrl) {
   const { pathname, query } = parsedUrl
   const wadParams = wadPattern.match(pathname)
   if (wadParams) {

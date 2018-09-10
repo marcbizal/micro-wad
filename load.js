@@ -2,7 +2,7 @@ const fsp = require('fs').promises
 const path = require('path')
 const _ = require('lodash')
 
-const WadParser = require('./WadParser')
+const Parser = require('./parser')
 
 function createFolderStructure(paths) {
   return paths.reduce((structure, path, i) => {
@@ -27,7 +27,7 @@ async function load(dir) {
         const resolved = await wad
         return {
           ...resolved,
-          ...WadParser.parse(await resolved.buffer)
+          ...Parser.parse(await resolved.buffer)
         }
       })
       .map(async wad => {
