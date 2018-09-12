@@ -1,3 +1,6 @@
+const dev = process.env.NODE_ENV !== 'production'
+const now = process.env.NOW
+
 const path = require('path')
 
 const _ = require('lodash')
@@ -10,10 +13,10 @@ const prettyBytes = require('pretty-bytes')
 const debug = require('debug')('wad')
 
 const removeEndSlash = require('./lib/remove-end-slash')
-const load = require('./load')
+const load = dev || now ? require('./load-from-fs') : require('./load-from-aws')
+const parse = require('./parse')
 
 const wadPattern = new UrlPattern('/api/:strategy(/*)')
-const dataDirectory = path.join(__dirname, 'data')
 let wads = []
 
 function getFile(wadId, fileId) {
@@ -134,7 +137,7 @@ function main(req, res, parsedUrl) {
 }
 
 async function setup(handler) {
-  wads = await load(dataDirectory)
+  wads = parse(await load())
   debug(`${wads.length} WADs loaded to memory`)
   wads.forEach(({ filename, buffer, files }) =>
     debug(

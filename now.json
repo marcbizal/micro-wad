@@ -1,0 +1,10 @@
+{
+  "env": {
+    "S3_KEY": "@wad-s3-key",
+    "S3_SECRET": "@wad-s3-secret",
+    "S3_REGION": "us-east-1",
+    "WAD_BUCKET": "rockraiders",
+    "WAD_0": "LegoRR0.wad",
+    "WAD_1": "LegoRR1.wad"
+  }
+}
