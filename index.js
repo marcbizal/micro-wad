@@ -1,5 +1,5 @@
 const dev = process.env.NODE_ENV !== 'production'
-const now = process.env.NOW
+const now = process.env.NOW === 'true'
 
 const path = require('path')
 
@@ -13,7 +13,8 @@ const prettyBytes = require('pretty-bytes')
 const debug = require('debug')('wad')
 
 const removeEndSlash = require('./lib/remove-end-slash')
-const load = dev || now ? require('./load-from-fs') : require('./load-from-aws')
+const load =
+  dev && !now ? require('./load-from-fs') : require('./load-from-aws')
 const parse = require('./parse')
 
 const wadPattern = new UrlPattern('/api/:strategy(/*)')
