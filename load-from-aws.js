@@ -6,9 +6,6 @@ const MultiProgress = require('multi-progress')
 
 const S3 = require('aws-sdk/clients/s3')
 
-// Import variables in .env files to process.env
-require('dotenv').config()
-
 const getCredentialsFromEnv = env => ({
   accessKeyId: env.S3_KEY,
   secretAccessKey: env.S3_SECRET,
@@ -77,11 +74,10 @@ function downloadWithProgressBar(downloadUrl, multi) {
 function loadFromAws() {
   const multi = new MultiProgress(process.stderr)
   return Promise.all(
-    paramsArray.map(params =>
-      getSignedUrlPromise('getObject', params).then(signedUrl =>
-        downloadWithProgressBar(signedUrl, multi)
-      )
-    )
+    paramsArray.map(async params => {
+      const signedUrl = await getSignedUrlPromise('getObject', params)
+      return downloadWithProgressBar(signedUrl, multi)
+    })
   )
 }
 
