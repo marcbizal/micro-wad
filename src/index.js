@@ -16,7 +16,7 @@ const UrlPattern = require('url-pattern')
 const prettyBytes = require('pretty-bytes')
 const debug = require('debug')('wad')
 
-const removeEndSlash = require('./lib/remove-end-slash')
+const removeEndSlash = require('./remove-end-slash')
 const load = dev || now ? require('./load-from-fs') : require('./load-from-aws')
 const parse = require('./parse')
 

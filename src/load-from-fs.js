@@ -1,7 +1,7 @@
 const fsp = require('fs').promises
 const path = require('path')
 
-const dir = path.join(__dirname, 'data')
+const dir = path.join(__dirname, '..', 'data')
 async function loadFromFs() {
   const files = await fsp.readdir(dir)
   return Promise.all(

@@ -7,5 +7,5 @@
     "WAD_0": "LegoRR0.wad",
     "WAD_1": "LegoRR1.wad"
   },
-  "files": ["data"]
+  "files": ["src", "data"]
 }
