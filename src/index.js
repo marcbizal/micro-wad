@@ -20,7 +20,7 @@ const removeEndSlash = require('./remove-end-slash')
 const load = dev || now ? require('./load-from-fs') : require('./load-from-aws')
 const parse = require('./parse')
 
-const wadPattern = new UrlPattern('/api/:strategy(/*)')
+const wadPattern = new UrlPattern('/:strategy(/*)')
 let wads = []
 
 function getFile(wadId, fileId) {
