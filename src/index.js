@@ -129,9 +129,19 @@ function main(req, res, parsedUrl) {
     }
 
     if (_.some(items, item => typeof item === 'object')) {
-      const list = _.uniq(
-        items.reduce((acc, cur) => _.concat(acc, _.keys(cur)), [])
+      const directories = items.map((item, wadId) =>
+        _.mapValues(item, subItem => {
+          if (typeof subItem === 'number')
+            return {
+              type: 'file',
+              ..._.get(wads, [wadId, 'files', subItem])
+            }
+
+          return { type: 'directory' }
+        })
       )
+
+      const list = directories.reduce((acc, cur) => _.assign(acc, cur), {})
       send(res, 200, list)
       return
     }
