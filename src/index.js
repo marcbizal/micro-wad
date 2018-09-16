@@ -128,16 +128,22 @@ function main(req, res, parsedUrl) {
       return
     }
 
+    // Return a directory listing, where the keys are the items in the directory,
+    // and the values are an object in the shape { type, size }
+
     if (_.some(items, item => typeof item === 'object')) {
       const directories = items.map((item, wadId) =>
         _.mapValues(item, subItem => {
           if (typeof subItem === 'number')
             return {
               type: 'file',
-              ..._.get(wads, [wadId, 'files', subItem])
+              size: _.get(wads, [wadId, 'files', subItem, 'size'])
             }
 
-          return { type: 'directory' }
+          if (typeof subItem === 'object')
+            return { type: 'directory', size: _.keys(subItem).length }
+
+          return subItem
         })
       )
 
