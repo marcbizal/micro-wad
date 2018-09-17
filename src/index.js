@@ -11,6 +11,7 @@ const _ = require('lodash')
 
 const { send } = require('micro')
 const compress = require('micro-compress')
+const cors = require('micro-cors')()
 
 const UrlPattern = require('url-pattern')
 const prettyBytes = require('pretty-bytes')
@@ -169,7 +170,9 @@ async function setup(handler) {
   )
   debug(`Ready to serve.`)
 
-  return compress(removeEndSlash(handler))
+  const wrappedHandler = cors(removeEndSlash(handler))
+
+  return dev ? wrappedHandler : compress(wrappedHandler)
 }
 
 module.exports = setup(main)

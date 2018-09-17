@@ -11,6 +11,7 @@
     "lodash": "^4.17.10",
     "micro": "^9.3.3",
     "micro-compress": "^1.0.0",
+    "micro-cors": "^0.1.0",
     "multi-progress": "^2.0.0",
     "now-env": "^3.1.0",
     "pretty-bytes": "^5.1.0",
@@ -25,7 +26,7 @@
     "xo": "^0.23.0"
   },
   "scripts": {
-    "dev": "DEBUG=* micro-dev",
+    "dev": "DEBUG=* micro-dev -p 4000",
     "start": "DEBUG=* micro",
     "test": "xo"
   },
