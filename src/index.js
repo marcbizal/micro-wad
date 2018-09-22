@@ -9,6 +9,7 @@ const path = require('path')
 const qs = require('querystring')
 
 const _ = require('lodash')
+const getInsensitive = require('get-insensitive')
 
 const { send } = require('micro')
 const compress = require('micro-compress')
@@ -19,7 +20,6 @@ const prettyBytes = require('pretty-bytes')
 const debug = require('debug')('wad')
 
 const removeEndSlash = require('./remove-end-slash')
-const getInsensitive = require('./get-insensitive')
 
 const load = dev || now ? require('./load-from-fs') : require('./load-from-aws')
 const parse = require('./parse')
