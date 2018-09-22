@@ -6,6 +6,7 @@ const dev = process.env.NODE_ENV !== 'production'
 const now = process.env.NOW
 
 const path = require('path')
+const qs = require('querystring')
 
 const _ = require('lodash')
 
@@ -18,11 +19,15 @@ const prettyBytes = require('pretty-bytes')
 const debug = require('debug')('wad')
 
 const removeEndSlash = require('./remove-end-slash')
+const getInsensitive = require('./get-insensitive')
+
 const load = dev || now ? require('./load-from-fs') : require('./load-from-aws')
 const parse = require('./parse')
 
 const wadPattern = new UrlPattern('/:strategy(/*)')
 let wads = []
+
+const shared = 'World/Shared'
 
 function getFile(wadId, fileId) {
   const wad = wads[wadId]
@@ -80,16 +85,30 @@ function main(req, res, parsedUrl) {
         )
       )
       .map(structure =>
-        _.get(
+        getInsensitive(
           structure,
           tokenizedRequestPath,
           _.isEmpty(tokenizedRequestPath) ? structure : null
         )
       )
 
+    const requestBasename = path.basename(requestPath)
+    const requestExt = path.extname(requestPath).toLowerCase()
+
     // If all of the items are null, this means that
     // the file or directory wasn't found
     if (_.every(items, item => item === null)) {
+      // Redirect to shared directory if query param 'strict' isn't included
+      if (!query.strict && !pathname.includes(shared)) {
+        const q = qs.stringify(query)
+        res.writeHead(301, {
+          Location:
+            ['/rel', shared, requestBasename].join('/') + (q ? '?' + q : '')
+        })
+        res.end()
+        return
+      }
+
       send(res, 404, 'FILE NOT FOUND')
       return
     }
@@ -100,9 +119,6 @@ function main(req, res, parsedUrl) {
     if (wadId >= 0) {
       const fileId = items[wadId]
       const slice = getFile(wadId, fileId)
-
-      const requestBasename = path.basename(requestPath)
-      const requestExt = path.extname(requestPath).toLowerCase()
 
       // If the requested file has a '.bmp' extension,
       // add a content dispositition and content type
