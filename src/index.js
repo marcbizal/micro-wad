@@ -28,6 +28,7 @@ const wadPattern = new UrlPattern('/:strategy(/*)')
 let wads = []
 
 const shared = 'World/Shared'
+const days30 = 2592000
 
 function getFile(wadId, fileId) {
   const wad = wads[wadId]
@@ -46,6 +47,11 @@ function getFile(wadId, fileId) {
 }
 
 function main(req, res, parsedUrl) {
+  res.setHeader(
+    'Cache-Control',
+    `max-age=${days30}, s-maxage=${days30}, public`
+  )
+
   const { pathname, query } = parsedUrl
   const wadParams = wadPattern.match(pathname)
   if (wadParams) {
