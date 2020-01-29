@@ -27,7 +27,7 @@
   },
   "scripts": {
     "dev": "DEBUG=* micro-dev -p 4000",
-    "start": "DEBUG=* micro",
+    "start": "DEBUG=* micro -l tcp://0.0.0.0:$PORT",
     "test": "xo"
   },
   "prettier": {
