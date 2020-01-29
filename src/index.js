@@ -1,3 +1,5 @@
+require('dotenv').config()
+
 const dev = process.env.NODE_ENV !== 'production'
 
 const path = require('path')
