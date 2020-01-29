@@ -1,9 +1,4 @@
-// Disable ESLint rule for import assignment, `now-env` only runs on import.
-// eslint-disable-next-line import/no-unassigned-import
-require('now-env')
-
 const dev = process.env.NODE_ENV !== 'production'
-const now = process.env.NOW
 
 const path = require('path')
 const qs = require('querystring')
@@ -21,7 +16,7 @@ const debug = require('debug')('wad')
 
 const removeEndSlash = require('./remove-end-slash')
 
-const load = dev || now ? require('./load-from-fs') : require('./load-from-aws')
+const load = dev ? require('./load-from-fs') : require('./load-from-aws')
 const parse = require('./parse')
 
 const wadPattern = new UrlPattern('/:strategy(/*)')
