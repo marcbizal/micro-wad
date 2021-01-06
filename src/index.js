@@ -63,11 +63,10 @@ function main(req, res, parsedUrl) {
         .map((wad, wadIndex) =>
           _.chain(wad)
             .get(strategy === 'abs' ? 'absolutePaths' : 'relativePaths')
-            .map(
-              (path, fileIndex) =>
-                path.toLowerCase().indexOf(find.toLowerCase()) >= 0
-                  ? { path, wadIndex, fileIndex }
-                  : null
+            .map((path, fileIndex) =>
+              path.toLowerCase().indexOf(find.toLowerCase()) >= 0
+                ? { path, wadIndex, fileIndex }
+                : null
             )
             .filter(Boolean)
             .value()

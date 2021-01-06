@@ -27,10 +27,8 @@ const s3 = new S3(credentials)
 
 const getSignedUrlPromise = (operation, params) =>
   new Promise((resolve, reject) => {
-    s3.getSignedUrl(
-      operation,
-      params,
-      (err, url) => (err ? reject(err) : resolve(url))
+    s3.getSignedUrl(operation, params, (err, url) =>
+      err ? reject(err) : resolve(url)
     )
   })
 
